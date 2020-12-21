@@ -1,0 +1,56 @@
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<fmt:setBundle basename="message"/>
+<fmt:setLocale value="${cookie['lang'].value}" scope="application"/>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title><fmt:message key="site_title"/></title>
+        <link href=css/style_main.css rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <%
+
+            request.setCharacterEncoding("UTF-8");
+            String searchString = "";
+
+            if (request.getParameter("search_string") != null) {
+                searchString = request.getParameter("search_string");
+                session.setAttribute("search_string", searchString);
+            } else if (session.getAttribute("search_string") != null) {
+                searchString = session.getAttribute("search_string").toString();
+            } else {
+                session.setAttribute("search_string", searchString);
+            }
+
+            if (request.getParameter("username") != null) {
+                session.setAttribute("username", request.getParameter("username"));
+            }
+
+        %>
+
+    <div class="container">
+
+        <div class="header">
+            <div class="logo">
+                <a href="/main"><img src="images/library.jpg" alt="Логотип" name="logo" height="120" width="120"/></a>
+
+            </div>
+            <div class="descr">
+                <h3><fmt:message key="header.inf"/> <br/> <fmt:message key="header.inf2"/></h3>
+
+            </div>
+            <div class="welcome">
+                <h5><fmt:message key="header.welcome"/>, <%=session.getAttribute("login")%> !</h5>
+                <h6><a href="/logout"><fmt:message key="header.exit"/></a></h6>
+            </div>
+            <div class="search_form">
+                <form name="search_form" method="GET" action="/books">
+                    <input type="text" name="search_string" value="<%=searchString%>" size="110"/>
+                    <input class="search_button" type="submit" value="<fmt:message key="header.search"/>"/>
+                    <label><fmt:message key="header.search2"/></label>
+                </form>
+            </div>
+        </div>
